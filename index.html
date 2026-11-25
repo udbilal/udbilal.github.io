@@ -183,6 +183,9 @@
       #tabel { grid-template-columns: repeat(5, 1fr); gap: 20px; }
     }
   </style>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0d6efd">
+<link rel="apple-touch-icon" href="/icon-192.png">
 </head>
 <body>
   <div class="top-bar">
@@ -240,5 +243,14 @@
   <script src="supabase.min.js"></script>
   <script src="toko-db.js?v=supa10"></script>
   <script type="module" src="script.js?v=fix-foto-11"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('PWA siap'))
+        .catch((err) => console.error('Gagal daftar SW:', err));
+    });
+  }
+</script>
 </body>
 </html>
