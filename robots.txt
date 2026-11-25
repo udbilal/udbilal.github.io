@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://udbilal.github.io/sitemap.xml
