@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Catatan Hutang - UD. BILAL</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{margin:0;background:#f3f5f4;color:#1f2937;padding:12px 12px 32px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:600px;margin:auto}
+
+/* --- HEADER HIJAU UD. BILAL --- */
+.note-header{background:linear-gradient(135deg,#14532d 0%,#16a34a 100%);color:#fff;border-radius:18px;padding:15px 16px;margin-bottom:12px;box-shadow:0 6px 18px rgba(22,163,74,.25)}
+.top-nav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.btn-back{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.18);color:#fff;padding:6px 12px;border-radius:10px;font-size:12px;font-weight:800;text-decoration:none;transition:background .2s}
+.btn-back:hover{background:rgba(255,255,255,.28)}
+.note-header h1{margin:0;font-size:22px;font-weight:900;line-height:1.1;letter-spacing:.2px;display:flex;align-items:center;gap:7px}
+.badge-toko{font-size:10px;background:#fbbf24;color:#14532d;padding:2px 7px;border-radius:6px;font-weight:900;letter-spacing:.5px}
+
+/* --- RINGKASAN HUTANG (2 KARTU) --- */
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sum-card{background:#fff;border:1px solid #eceeed;border-left:4px solid #dc2626;border-radius:14px;padding:12px 14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.sum-card.orang{border-left-color:#0f766e}
+.sum-label{font-size:10.5px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:.4px}
+.summary strong{display:block;font-size:19px;font-weight:900;color:#dc2626;margin-top:3px;font-variant-numeric:tabular-nums}
+.sum-card.orang strong{color:#0f766e}
+
+/* --- KARTU FORM & KONTROL --- */
+.card{background:#fff;border-radius:16px;padding:15px;margin-bottom:12px;border:1px solid #eceeed;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.card-title{font-size:13px;font-weight:800;color:#14532d;margin:0 0 11px;padding-bottom:8px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;gap:6px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px}
+input,select{width:100%;padding:10px 12px;border:2px solid #e5e7eb;border-radius:11px;font-size:14px;font-weight:600;background:#fff;color:#111827;outline:none;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus{border-color:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,.12)}
+button{border:none;border-radius:11px;padding:10px 12px;font-size:13px;font-weight:800;cursor:pointer;transition:opacity .2s,background .2s}
+button:disabled{opacity:.55;cursor:not-allowed}
+
+/* --- MULTI BARANG HUTANG --- */
+.item-box{background:#f8faf9;border:1px solid #e5ebe7;border-radius:12px;padding:10px;margin-bottom:8px}
+.item-head-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.item-badge{font-size:11px;font-weight:800;color:#15803d;background:#dcfce7;padding:2px 8px;border-radius:6px}
+.btn-del-row{background:#fee2e2;color:#dc2626;font-size:11px;padding:3px 8px;border-radius:6px}
+.btn-del-row:hover{background:#fecaca}
+.item-fields{display:grid;grid-template-columns:1.45fr 1fr;gap:8px}
+.btn-add-row{width:100%;background:#f0fdf4;color:#15803d;border:1.5px dashed #86efac;padding:9px;font-size:12.5px;margin-bottom:10px}
+.btn-add-row:hover{background:#dcfce7}
+
+.action-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;background:#f8faf9;border-radius:12px;border:1px solid #e5ebe7}
+.total-form-info{font-size:11.5px;font-weight:700;color:#6b7280}
+.total-form-info strong{display:block;font-size:17px;font-weight:900;color:#111827;font-variant-numeric:tabular-nums}
+.btn-add{background:#16a34a;color:#fff;padding:11px 18px;font-size:13.5px;box-shadow:0 3px 10px rgba(22,163,74,.25);white-space:nowrap}
+.btn-add:hover{background:#15803d}
+
+/* --- DAFTAR PELANGGAN --- */
+.item{background:#fff;border:1px solid #eceeed;border-radius:16px;padding:14px 15px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,.03);transition:border-color .2s}
+.item:hover{border-color:#d1d5db}
+.item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.item-head > div:last-child{flex-shrink:0;text-align:right}
+.nama{font-size:16px;font-weight:900;color:#111827}
+.barang-list{font-size:12.5px;color:#14532d;margin-top:3px;font-weight:700;line-height:1.35}
+.meta{font-size:12px;color:#6b7280;margin-top:3px;font-weight:600}
+.sisa{font-size:17px;font-weight:900;color:#dc2626;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.lunas .sisa{color:#16a34a}
+.badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;font-weight:800;margin-top:4px;white-space:nowrap}
+.b-belum{background:#fee2e2;color:#b91c1c}
+.b-lunas{background:#dcfce7;color:#15803d}
+.actions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.btn-lunas{background:#16a34a;color:#fff}
+.btn-lunas:hover{background:#15803d}
+.btn-cicil{background:#dcfce7;color:#15803d}
+.btn-cicil:hover{background:#bbf7d0}
+.btn-edit{background:#dbeafe;color:#1d4ed8}
+.btn-edit:hover{background:#bfdbfe}
+.btn-del{background:#fee2e2;color:#b91c1c}
+.btn-del:hover{background:#fecaca}
+.btn-detail{background:#f3f4f6;color:#374151}
+.btn-detail:hover{background:#e5e7eb}
+
+.riwayat{margin-top:10px;padding-top:10px;border-top:1px dashed #e5e7eb;display:none}
+.riwayat.open{display:block}
+.row-r{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;padding:8px 0;border-bottom:1px solid #f3f4f6}
+.row-r:last-child{border-bottom:none}
+.row-r-info{flex:1;min-width:0;line-height:1.4}
+.row-r-act{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.btn-mini{padding:5px 9px;font-size:11px;border-radius:8px;font-weight:800}
+.empty{text-align:center;color:#9ca3af;padding:28px 16px;font-size:13.5px;font-weight:600}
+
+/* --- MODAL --- */
+.modal{position:fixed;inset:0;background:rgba(17,24,39,.5);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;padding:14px;z-index:99}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:18px;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+.modal-box h3{margin:0 0 12px;font-size:17px;font-weight:900;color:#111827}
+.modal-box label{display:block;font-size:12px;font-weight:700;color:#4b5563;margin:9px 0 4px}
+.modal-act{display:flex;gap:8px;margin-top:14px}
+.modal-act button{flex:1;padding:11px}
+
+/* --- GERBANG LOGIN ADMIN --- */
+.butuh-login{display:none!important}
+#gateNote{position:fixed;inset:0;background:#f3f5f4;z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px}
+#gateNote .box{background:#fff;border-radius:18px;padding:26px 24px;max-width:370px;width:100%;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.08);border:1px solid #eceeed}
+#gateNote input{margin-bottom:10px}
+#gateNote button{background:#16a34a;color:#fff;width:100%;padding:12px;font-size:15px}
+
+/* --- TAMPILAN TABLET (640px ke atas) --- */
+@media (min-width:640px){
+  .wrap{max-width:720px;padding:8px 0}
+}
+
+/* --- TAMPILAN LAPTOP & DESKTOP (880px ke atas) --- */
+@media (min-width:880px){
+  body{padding:28px 32px 36px}
+  .wrap{max-width:1180px}
+
+  .note-header{padding:20px 24px;border-radius:20px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+  .top-nav{margin-bottom:0;order:2}
+  .note-header h1{font-size:25px;order:1}
+
+  .note-grid{display:grid;grid-template-columns:410px 1fr;gap:22px;align-items:start}
+  .note-left{position:sticky;top:24px}
+
+  .summary{gap:16px;margin-bottom:16px}
+  .sum-card{padding:14px 18px}
+  .summary strong{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div id="gateNote">
+  <div class="box">
+    <div id="gateChecking">
+      <div style="font-size:36px;margin-bottom:8px">🔒</div>
+      <b style="font-size:16px;color:#166534">Memeriksa Sesi Admin...</b>
+      <p style="font-size:13px;color:#6b7280;margin:6px 0 0">Mohon tunggu sebentar</p>
+    </div>
+    <div id="gateForm" style="display:none;text-align:left">
+      <p style="font-weight:900;text-align:center;margin:0 0 4px;font-size:18px;color:#166534">🔑 Login Admin</p>
+      <p style="font-size:13px;color:#6b7280;text-align:center;margin:0 0 14px">Catatan hutang khusus pemilik UD. BILAL</p>
+      <input id="gateEmail" type="email" placeholder="Email Admin" autocomplete="username">
+      <input id="gatePass" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')gateMasuk()">
+      <button id="btnGateLogin" onclick="gateMasuk()">MASUK</button>
+      <a href="./index.html" style="display:block;text-align:center;margin-top:12px;font-size:12px;color:#6b7280;text-decoration:none">← Kembali ke Toko</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap butuh-login">
+  <!-- Header Hijau UD. BILAL -->
+  <div class="note-header">
+    <div class="top-nav">
+      <a href="./admin.html" class="btn-back">← Admin</a>
+    </div>
+    <h1>Catatan Hutang <span class="badge-toko">UD. BILAL</span></h1>
+  </div>
+
+  <div class="note-grid">
+    <!-- Kolom Kiri: Form Tambah Hutang -->
+    <div class="note-left">
+      <div class="card">
+        <div class="card-title">📝 Tambah Catatan Hutang</div>
+        <div class="grid">
+          <input id="nama" placeholder="Nama pelanggan" autocomplete="off" style="grid-column:1 / -1">
+          <input id="tgl" type="date">
+          <input id="tglJam" type="time">
+        </div>
+
+        <div id="daftarBarangHutang"></div>
+
+        <button type="button" class="btn-add-row" id="btnTambahBarang" onclick="tambahBarisBarang(true)">
+          + Tambah Barang Lain
+        </button>
+
+        <div class="action-bar">
+          <div class="total-form-info">Total Hutang:<strong id="totalFormHutang">Rp 0</strong></div>
+          <button class="btn-add" id="btnSimpan" onclick="simpan()">+ Simpan</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kolom Kanan: Ringkasan & Daftar Nama -->
+    <div class="note-right">
+      <div class="summary">
+        <div class="sum-card">
+          <div class="sum-label">Total Belum Lunas</div>
+          <strong id="totalHutang">Rp 0</strong>
+        </div>
+        <div class="sum-card orang">
+          <div class="sum-label">Pelanggan Berhutang</div>
+          <strong id="totalOrang">0 Orang</strong>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📋 Daftar Nama</div>
+        <div id="list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Edit Catatan -->
+<div class="modal" id="modalEdit" onclick="if(event.target===this)tutupEdit()">
+  <div class="modal-box">
+    <h3>Edit Catatan Hutang</h3>
+    <input type="hidden" id="editId">
+    <label>Nama Pelanggan</label>
+    <input id="editNama" placeholder="Nama pelanggan">
+    <label>Nama Barang / Keterangan</label>
+    <input id="editKet" placeholder="Nama barang">
+    <label>Harga / Jumlah (Rp)</label>
+    <input id="editJumlah" type="number" placeholder="Jumlah (Rp)">
+    <label>Tanggal</label>
+    <input id="editTgl" type="date">
+    <label>Jam</label>
+    <input id="editTglJam" type="time">
+    <label>Status</label>
+    <select id="editStatus">
+      <option value="Belum Lunas">Belum Lunas</option>
+      <option value="Lunas">Lunas</option>
+    </select>
+    <div class="modal-act">
+      <button class="btn-detail" onclick="tutupEdit()">Batal</button>
+      <button class="btn-add" style="margin-top:0" onclick="simpanEdit()">Simpan Perubahan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Bayar / Cicil -->
+<div class="modal" id="modalCicil" onclick="if(event.target===this)tutupCicil()">
+  <div class="modal-box">
+    <h3>Bayar / Cicil Hutang</h3>
+    <div id="cicilInfo" style="font-size:13px;color:#4b5563;margin-bottom:8px;line-height:1.45;background:#f8faf9;padding:10px 12px;border-radius:10px;border:1px solid #e5ebe7"></div>
+    <label>Nominal Dibayar (Rp)</label>
+    <input id="cicilNominal" type="number" placeholder="Masukkan nominal bayar">
+    <label>Tanggal Bayar</label>
+    <input id="cicilTgl" type="date">
+    <label>Jam Bayar</label>
+    <input id="cicilTglJam" type="time">
+    <label>Keterangan (opsional)</label>
+    <input id="cicilKet" placeholder="Contoh: Cicilan 1 / Transfer">
+    <div class="modal-act">
+      <button class="btn-detail" onclick="tutupCicil()">Batal</button>
+      <button class="btn-add" style="margin-top:0" onclick="simpanCicil()">Simpan Pembayaran</button>
+    </div>
+  </div>
+</div>
+
+<script src="supabase.min.js"></script>
+<script src="toko-db.js?v=supa10"></script>
+<script>
+const rp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
+function wibSekarang() {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Jakarta',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hour12: false
+  }).formatToParts(new Date());
+  const p = Object.fromEntries(parts.map(x => [x.type, x.value]));
+  return { tanggal: `${p.year}-${p.month}-${p.day}`, jam: `${p.hour}:${p.minute}` };
+}
+
+function fmtTgl(val) {
+  if (!val) return '';
+  return String(val).trim().slice(0, 10);
+}
+
+function fmtJam(val) {
+  if (!val) return '';
+  return String(val).trim().slice(0, 5);
+}
+
+function fmtTglJam(tglVal, jamVal) {
+  const t = fmtTgl(tglVal);
+  const j = fmtJam(jamVal);
+  if (!t) return '-';
+  const p = t.split('-');
+  const dmy = p.length === 3 ? `${p[2]}-${p[1]}-${p[0]}` : t;
+  return j ? `${dmy} • ${j}` : dmy;
+}
+
+function hitungHari(tglAwal, tglAkhir) {
+  const a = fmtTgl(tglAwal);
+  const b = fmtTgl(tglAkhir);
+  if (!a || !b) return 0;
+  const msA = Date.parse(a + 'T00:00:00Z');
+  const msB = Date.parse(b + 'T00:00:00Z');
+  if (isNaN(msA) || isNaN(msB)) return 0;
+  return Math.max(0, Math.round((msB - msA) / 86400000));
+}
+
+function setDefaultWaktu(idTgl, idJam) {
+  const now = wibSekarang();
+  document.getElementById(idTgl).value = now.tanggal;
+  document.getElementById(idJam).value = now.jam;
+}
+
+function esc(str) {
+  return String(str ?? '').replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
+}
+
+function titleCase(str) {
+  return String(str || '').trim().toLowerCase().replace(/\s+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+// --- MULTI INPUT BARANG HUTANG ---
+const elDaftarBarang = document.getElementById('daftarBarangHutang');
+const elTotalFormHutang = document.getElementById('totalFormHutang');
+
+function tambahBarisBarang(autoFocus = false) {
+  const box = document.createElement('div');
+  box.className = 'item-box';
+  box.innerHTML = `
+    <div class="item-head-row">
+      <span class="item-badge">Barang #1</span>
+      <button type="button" class="btn-del-row" onclick="hapusBarisBarang(this)">Hapus</button>
+    </div>
+    <div class="item-fields">
+      <input type="text" class="inp-barang" placeholder="Nama barang (cth: Beras)" autocomplete="off">
+      <input type="number" class="inp-harga" placeholder="Harga (Rp)" min="1" oninput="hitungTotalFormHutang()">
+    </div>
+  `;
+  elDaftarBarang.appendChild(box);
+  perbaruiNomorBarang();
+  if (autoFocus) box.querySelector('.inp-barang').focus();
+}
+
+function hapusBarisBarang(btn) {
+  const boxes = elDaftarBarang.querySelectorAll('.item-box');
+  if (boxes.length <= 1) return;
+  btn.closest('.item-box').remove();
+  perbaruiNomorBarang();
+  hitungTotalFormHutang();
+}
+
+function perbaruiNomorBarang() {
+  const boxes = elDaftarBarang.querySelectorAll('.item-box');
+  boxes.forEach((box, idx) => {
+    box.querySelector('.item-badge').textContent = `Barang #${idx + 1}`;
+    const btnDel = box.querySelector('.btn-del-row');
+    btnDel.style.display = boxes.length > 1 ? 'inline-block' : 'none';
+  });
+}
+
+function hitungTotalFormHutang() {
+  const boxes = elDaftarBarang.querySelectorAll('.item-box');
+  let total = 0;
+  boxes.forEach(box => {
+    total += Number(box.querySelector('.inp-harga').value) || 0;
+  });
+  elTotalFormHutang.textContent = rp(total);
+}
+
+function resetFormBarang() {
+  elDaftarBarang.innerHTML = '';
+  tambahBarisBarang(false);
+  elTotalFormHutang.textContent = 'Rp 0';
+}
+
+setDefaultWaktu('tgl', 'tglJam');
+resetFormBarang();
+
+let data = [];
+let busy = false;
+let boleh = false;
+let loadVersion = 0;
+const openRiwayat = new Set();
+
+function setBusy(state) {
+  busy = state;
+  const btnSimpan = document.getElementById('btnSimpan');
+  btnSimpan.disabled = state;
+  btnSimpan.textContent = state ? 'Menyimpan...' : '+ Simpan';
+  document.getElementById('btnTambahBarang').disabled = state;
+  document.querySelectorAll('.modal button, .actions button, .row-r-act button')
+    .forEach(b => { b.disabled = state; });
+}
+
+async function muat() {
+  if (!boleh) return;
+  const ticket = ++loadVersion;
+  const { data: rows, error } = await db
+    .from('catatan_hutang')
+    .select('*')
+    .order('tanggal', { ascending: false })
+    .order('jam', { ascending: false, nullsFirst: false })
+    .order('id', { ascending: false });
+
+  if (!boleh || ticket !== loadVersion) return;
+  if (error) return alert(error.message);
+  data = (rows || []).map(r => ({
+    id: String(r.id),
+    nama: r.nama || '',
+    jumlah: Number(r.jumlah) || 0,
+    tanggal: fmtTgl(r.tanggal),
+    jam: fmtJam(r.jam),
+    ket: r.ket || '',
+    status: r.status || 'Belum Lunas'
+  }));
+  render();
+}
+
+async function simpanPerubahan(fnQuery, done) {
+  if (busy || !boleh) return;
+  setBusy(true);
+  try {
+    const res = await fnQuery();
+    if (res?.error) throw res.error;
+    if (done) done();
+    await muat();
+  } catch (e) {
+    alert(e.message || 'Gagal menyimpan');
+  } finally {
+    setBusy(false);
+  }
+}
+
+function simpan() {
+  if (!boleh || busy) return;
+  const nama = titleCase(document.getElementById('nama').value);
+  const tanggal = document.getElementById('tgl').value;
+  const jam = document.getElementById('tglJam').value || null;
+
+  if (!nama) {
+    alert('Nama pelanggan wajib diisi');
+    document.getElementById('nama').focus();
+    return;
+  }
+  if (!tanggal || !jam) return alert('Tanggal dan jam wajib diisi');
+
+  const boxes = Array.from(elDaftarBarang.querySelectorAll('.item-box'));
+  const rows = [];
+
+  for (let i = 0; i < boxes.length; i++) {
+    const inpBarang = boxes[i].querySelector('.inp-barang');
+    const inpHarga = boxes[i].querySelector('.inp-harga');
+    const barang = inpBarang.value.trim();
+    const harga = Number(inpHarga.value);
+
+    if (!barang) {
+      alert(`Nama barang pada Barang #${i + 1} wajib diisi`);
+      inpBarang.focus();
+      return;
+    }
+    if (!Number.isFinite(harga) || harga <= 0) {
+      alert(`Harga pada Barang #${i + 1} harus lebih dari 0`);
+      inpHarga.focus();
+      return;
+    }
+
+    rows.push({
+      nama,
+      jumlah: harga,
+      tanggal,
+      jam,
+      ket: barang,
+      status: 'Belum Lunas'
+    });
+  }
+
+  simpanPerubahan(
+    () => db.from('catatan_hutang').insert(rows),
+    () => {
+      document.getElementById('nama').value = '';
+      resetFormBarang();
+      setDefaultWaktu('tgl', 'tglJam');
+    }
+  );
+}
+
+function lunasSemua(nama) {
+  if (!boleh || busy) return;
+  const target = titleCase(nama);
+  if (!confirm(`Lunasi dan hapus permanen semua catatan hutang ${target}?`)) return;
+  const ids = data.filter(d => titleCase(d.nama) === target).map(d => d.id);
+  if (!ids.length) return;
+  simpanPerubahan(
+    () => db.from('catatan_hutang').delete().in('id', ids),
+    () => openRiwayat.delete(target)
+  );
+}
+
+function hapusSatu(id) {
+  if (!boleh || busy) return;
+  if (!confirm('Hapus catatan transaksi ini?')) return;
+  simpanPerubahan(() => db.from('catatan_hutang').delete().eq('id', id));
+}
+
+function bukaEdit(id) {
+  if (busy) return;
+  const item = data.find(d => String(d.id) === String(id));
+  if (!item) return;
+  document.getElementById('editId').value = item.id;
+  document.getElementById('editNama').value = titleCase(item.nama);
+  document.getElementById('editJumlah').value = item.jumlah;
+  document.getElementById('editTgl').value = fmtTgl(item.tanggal);
+  document.getElementById('editTglJam').value = fmtJam(item.jam);
+  document.getElementById('editKet').value = item.ket || '';
+  document.getElementById('editStatus').value = item.status || 'Belum Lunas';
+  document.getElementById('modalEdit').classList.add('show');
+}
+
+function tutupEdit() {
+  document.getElementById('modalEdit').classList.remove('show');
+}
+
+function simpanEdit() {
+  if (!boleh || busy) return;
+  const id = document.getElementById('editId').value;
+  const nama = titleCase(document.getElementById('editNama').value);
+  const jumlah = Number(document.getElementById('editJumlah').value);
+  const tanggal = document.getElementById('editTgl').value;
+  const jam = document.getElementById('editTglJam').value || null;
+  const ket = document.getElementById('editKet').value.trim();
+  const status = document.getElementById('editStatus').value;
+
+  if (!nama || !Number.isFinite(jumlah) || jumlah === 0) return alert('Nama dan jumlah wajib diisi');
+  if (!tanggal || !jam) return alert('Tanggal dan jam wajib diisi');
+  simpanPerubahan(
+    () => db.from('catatan_hutang').update({ nama, jumlah, tanggal, jam, ket, status }).eq('id', id),
+    tutupEdit
+  );
+}
+
+let targetCicilNama = '';
+let targetCicilSisa = 0;
+
+function bukaCicil(nama, sisa) {
+  if (busy) return;
+  targetCicilNama = titleCase(nama);
+  targetCicilSisa = Number(sisa) || 0;
+  document.getElementById('cicilInfo').innerHTML = `Pelanggan: <b>${esc(targetCicilNama)}</b><br>Sisa hutang saat ini: <b style="color:#dc2626">${rp(targetCicilSisa)}</b>`;
+  document.getElementById('cicilNominal').value = '';
+  setDefaultWaktu('cicilTgl', 'cicilTglJam');
+  document.getElementById('cicilKet').value = '';
+  document.getElementById('modalCicil').classList.add('show');
+}
+
+function tutupCicil() {
+  document.getElementById('modalCicil').classList.remove('show');
+}
+
+async function simpanCicil() {
+  if (busy || !boleh) return;
+  const nominal = Number(document.getElementById('cicilNominal').value);
+  const ket = document.getElementById('cicilKet').value.trim() || 'Cicilan / Bayar Sebagian';
+  const tanggal = document.getElementById('cicilTgl').value;
+  const jam = document.getElementById('cicilTglJam').value || null;
+  if (!tanggal || !jam) return alert('Isi tanggal dan jam terlebih dahulu.');
+  if (!Number.isFinite(nominal) || nominal <= 0) return alert('Masukkan nominal pembayaran yang valid');
+
+  const sisaTerbaru = data
+    .filter(d => titleCase(d.nama) === targetCicilNama && d.status !== 'Lunas')
+    .reduce((a, b) => a + Number(b.jumlah), 0);
+
+  if (sisaTerbaru <= 0) {
+    alert('Hutang pelanggan ini sudah lunas.');
+    tutupCicil();
+    return;
+  }
+
+  if (nominal >= sisaTerbaru) {
+    const infoKembalian = nominal > sisaTerbaru ? ` (Kembalian ${rp(nominal - sisaTerbaru)})` : '';
+    const berubahMsg = sisaTerbaru !== targetCicilSisa ? `Catatan: Sisa hutang terbaru adalah ${rp(sisaTerbaru)}.\n\n` : '';
+    if (!confirm(`${berubahMsg}Nominal ${rp(nominal)}${infoKembalian} melunasi seluruh sisa hutang (${rp(sisaTerbaru)}). Lunasi dan hapus catatan hutang ${targetCicilNama}?`)) {
+      return;
+    }
+
+    simpanPerubahan(
+      () => db.rpc('lunaskan_hutang', {
+        p_nama: targetCicilNama,
+        p_sisa: sisaTerbaru,
+        p_tanggal: tanggal,
+        p_jam: jam,
+        p_ket: `Pelunasan: ${ket}${infoKembalian}`
+      }),
+      () => {
+        openRiwayat.delete(targetCicilNama);
+        tutupCicil();
+      }
+    );
+    return;
+  }
+
+  const item = {
+    nama: targetCicilNama,
+    jumlah: -Math.abs(nominal),
+    tanggal,
+    jam,
+    ket: `Bayar: ${ket}`,
+    status: 'Belum Lunas'
+  };
+
+  simpanPerubahan(() => db.from('catatan_hutang').insert(item), tutupCicil);
+}
+
+function toggleRiwayat(key) {
+  if (openRiwayat.has(key)) openRiwayat.delete(key);
+  else openRiwayat.add(key);
+  render();
+}
+
+function render() {
+  const grup = {};
+
+  data.forEach(d => {
+    const key = titleCase(d.nama);
+    if (!grup[key]) grup[key] = { nama: key, items: [] };
+    grup[key].items.push(d);
+  });
+
+  const hariIniWib = wibSekarang().tanggal;
+  const listOrang = Object.values(grup).map(g => {
+    const belum = g.items.filter(x => x.status !== 'Lunas');
+    const sisa = belum.reduce((a, b) => a + Number(b.jumlah), 0);
+    const lunas = belum.length === 0 || sisa <= 0;
+
+    let tglAcuan = '';
+    let infoDurasi = '';
+    if (!lunas && belum.length > 0) {
+      const urutAwal = [...belum].sort((a, b) => (a.tanggal + a.jam).localeCompare(b.tanggal + b.jam));
+      tglAcuan = urutAwal[0].tanggal;
+      const hari = hitungHari(tglAcuan, hariIniWib);
+      infoDurasi = ` • Sudah ${hari} hari`;
+    } else {
+      const urutAkhir = [...g.items].sort((a, b) => (b.tanggal + b.jam).localeCompare(a.tanggal + a.jam));
+      tglAcuan = urutAkhir[0]?.tanggal || '';
+      infoDurasi = ' • Lunas';
+    }
+
+    const daftarBarang = (belum.length ? belum : g.items)
+      .filter(x => Number(x.jumlah) > 0 && String(x.ket || '').trim())
+      .map(x => String(x.ket).trim())
+      .join(', ');
+
+    return { ...g, sisa: Math.max(0, sisa), lunas, tglAcuan, infoDurasi, daftarBarang };
+  });
+
+  const tampil = listOrang.filter(o => !o.lunas);
+  const totalBelum = tampil.reduce((a, b) => a + b.sisa, 0);
+  document.getElementById('totalHutang').textContent = rp(totalBelum);
+  document.getElementById('totalOrang').textContent = tampil.length + ' Orang';
+
+  const el = document.getElementById('list');
+  if (!tampil.length) {
+    el.innerHTML = '<div class="empty">Belum ada catatan</div>';
+    return;
+  }
+
+  el.innerHTML = tampil.map(o => {
+    const namaJs = esc(JSON.stringify(o.nama));
+    return `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <div class="nama">${esc(o.nama)}</div>
+          ${o.daftarBarang ? `<div class="barang-list">📦 ${esc(o.daftarBarang)}</div>` : ''}
+          <div class="meta">${o.items.length} catatan • Sejak ${fmtTglJam(o.tglAcuan)}${o.infoDurasi}</div>
+        </div>
+        <div>
+          <div class="sisa">${rp(o.sisa)}</div>
+          <div style="text-align:right"><span class="badge b-belum">Belum Lunas</span></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn-lunas" onclick="lunasSemua(${namaJs})">Tandai Lunas</button>
+        <button class="btn-cicil" onclick="bukaCicil(${namaJs}, ${o.sisa})">Bayar / Cicil</button>
+        <button class="btn-detail" onclick="toggleRiwayat(${namaJs})">${openRiwayat.has(o.nama) ? 'Tutup Rincian' : 'Rincian (' + o.items.length + ')'}</button>
+      </div>
+      <div class="riwayat ${openRiwayat.has(o.nama) ? 'open' : ''}">
+        ${o.items.map(x => {
+          const idJs = esc(JSON.stringify(String(x.id)));
+          return `
+          <div class="row-r">
+            <div class="row-r-info">
+              <b>${rp(x.jumlah)}</b> ${x.ket ? '• ' + esc(x.ket) : ''}<br>
+              <span style="color:#6b7280">${fmtTglJam(x.tanggal, x.jam)}</span>
+            </div>
+            <div class="row-r-act">
+              <button class="btn-edit btn-mini" onclick="bukaEdit(${idJs})">Edit</button>
+              <button class="btn-del btn-mini" onclick="hapusSatu(${idJs})">Hapus</button>
+            </div>
+          </div>
+        `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+  }).join('');
+}
+
+function setAksesNote(allowed) {
+  document.querySelector('.wrap')?.classList.toggle('butuh-login', !allowed);
+  document.getElementById('gateNote').style.display = allowed ? 'none' : 'flex';
+}
+
+async function gateMasuk() {
+  const btn = document.getElementById('btnGateLogin');
+  if (btn.disabled) return;
+  const pass = document.getElementById('gatePass');
+  btn.disabled = true;
+  try {
+    await masuk(document.getElementById('gateEmail').value.trim(), pass.value);
+  } catch (e) {
+    alert(e.message);
+  } finally {
+    btn.disabled = false;
+    pass.value = '';
+  }
+}
+
+pantauAdmin(async allowed => {
+  boleh = allowed;
+  loadVersion++;
+  openRiwayat.clear();
+  setAksesNote(allowed);
+  document.getElementById('gateChecking').style.display = 'none';
+  document.getElementById('gateForm').style.display = 'block';
+  if (allowed) {
+    await muat();
+  } else {
+    data = [];
+    tutupEdit();
+    tutupCicil();
+    render();
+  }
+}, e => alert(e.message));
+</script>
+</body>
+</html>
